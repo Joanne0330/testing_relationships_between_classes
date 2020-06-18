@@ -19,14 +19,29 @@ require_relative '../lib/secret_diary'
 
 RSpec.describe SecretDiary do
   context "when locked" do
-    pending "refuses to be read"
+    it "refuses to be read" do
+      diary = SecretDiary.new("Today...")
+      expect(diary.read).to eq('Go away!')
+    end
 
-    pending "refuses to be written"
+    it "refuses to be written" do
+      diary = SecretDiary.new("Dear Diary,")
+      expect(diary.write("Dear Diary,")).to eq ('Go away!')
+    end
   end
 
   context "when unlocked" do
-    pending "gets read"
+    let(:diary) {double :fake_diary, :read => 'Access granted', :write => 'Access granted'}
+    it "gets read" do
+      secret_diary = SecretDiary.new(diary)
+      secret_diary.unlock
+      expect(secret_diary.read).to eq('Access granted')
+    end
 
-    pending "gets written"
+    it "gets written" do
+      secret_diary = SecretDiary.new(diary)
+      secret_diary.unlock
+      expect(secret_diary.write("hello")).to eq('Access granted')
+    end
   end
 end
